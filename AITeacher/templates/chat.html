@@ -16,7 +16,7 @@
       font-family: "Poppins", sans-serif;
     }
 
-    /* Base styles */
+    
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -121,7 +121,6 @@
       color: #28a745;
     }
 
-    /* Typing indicator */
     #typing-indicator {
       display: none;
       text-align: center;
@@ -152,8 +151,6 @@
       <h2 class="chat-title">InterviewerBot</h2>
     </div>
     <div id="chat-history" class="messages">
-      <!-- Messages will be appended here -->
-      <!-- Sample messages -->
       <div class="user-message"><i class="fas fa-user"></i> This is a user message</div><br>
       <div class="chatbot-message"><i class="fas fa-robot"></i> This is a chatbot message</div>
     </div>
@@ -171,50 +168,44 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script>
     $(document).ready(function () {
-      // Speech recognition button click event
       $("#speechButton").on("click", function () {
         recognizeSpeech();
       });
-
-      // Submit form event handler
       $("#messageForm").on("submit", function (event) {
-        event.preventDefault(); // Prevent form submission
-        var userMessage = $("#userMessage").val(); // Get user message from input field
-        sendMessage(userMessage); // Send user message
-        $("#userMessage").val(""); // Clear the input field after sending the message
+        event.preventDefault(); 
+        var userMessage = $("#userMessage").val(); 
+        sendMessage(userMessage); 
+        $("#userMessage").val(""); 
       });
 
-      // Function to recognize speech
       function recognizeSpeech() {
-        var recognition = new webkitSpeechRecognition(); // Create speech recognition object
-        recognition.lang = 'en-US'; // Set language
-        recognition.start(); // Start recognition
+        var recognition = new webkitSpeechRecognition(); 
+        recognition.lang = 'en-US'; 
+        recognition.start(); 
 
         recognition.onresult = function (event) {
-          var userSpeech = event.results[0][0].transcript; // Get recognized speech
-          sendMessage(userSpeech); // Send user speech
+          var userSpeech = event.results[0][0].transcript; 
+          sendMessage(userSpeech);
         };
 
         recognition.onerror = function (event) {
           console.error("Speech recognition error:", event.error);
         };
       }
-
-      // Function to send user message
       function sendMessage(message) {
         $.ajax({
           type: "POST",
           url: "/",
-          data: { msg: message }, // Send user message to Flask backend
+          data: { msg: message }, 
           success: function (response) {
-            // Update the chat interface with the received response and chat history
+            
             $(".messages").append('<br><div class="user-message"><i class="fas fa-user"></i> ' + message + '</div><br>');
             $(".messages").append('<div class="chatbot-message"><i class="fas fa-robot"></i> ' + response.response + '</div><br>');
-            // Scroll to bottom of chat history
+            
             $(".messages").scrollTop($(".messages")[0].scrollHeight);
           },
           error: function (xhr, status, error) {
-            // Handle errors
+          
             console.error(xhr.responseText);
           }
         });
